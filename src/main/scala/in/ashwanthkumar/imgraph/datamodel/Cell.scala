@@ -4,20 +4,22 @@ import in.ashwanthkumar.imgraph.datamodel.Constants._
 import in.ashwanthkumar.imgraph.types.{IntData, StringData}
 
 trait Cell {
+  require(hasRequiredProperties, s"Cell-$id doesn't have all these ${requiredProperties.mkString(",")} properties")
   val id: Int
   val properties: Properties
+
+  protected def requiredProperties: List[String]
+  protected def hasRequiredProperties: Boolean = requiredProperties.forall(properties.contains)
 }
 
 case class Edge(id: Int, properties: Properties) extends Cell {
-  require(hasRequiredProperties, s"Edge-$id doesn't have all these ${requiredProperties.mkString(",")} properties")
 
   def left: Int = properties.int(LEFT_VERTEX)
   def right: Int = properties.int(RIGHT_VERTEX)
   def `type`: String = properties.string(EDGE_TYPE)
   def name = properties.string(LABEL)
 
-  private def requiredProperties = List(LEFT_VERTEX, RIGHT_VERTEX, EDGE_TYPE)
-  private def hasRequiredProperties: Boolean = requiredProperties.forall(properties.contains)
+  protected def requiredProperties = List(LEFT_VERTEX, RIGHT_VERTEX, EDGE_TYPE, LABEL)
 }
 
 object Edge {
@@ -37,4 +39,7 @@ object Edge {
 
 case class Vertex(id: Int, properties: Properties) extends Cell {
   def edges = properties.list[Int](VERTEX_EDGES)
+  def name = properties.string(LABEL)
+
+  protected def requiredProperties = List(VERTEX_EDGES, LABEL)
 }
