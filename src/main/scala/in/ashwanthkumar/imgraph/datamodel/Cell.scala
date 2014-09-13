@@ -21,12 +21,14 @@ case class Edge(id: Int, properties: Properties) extends Cell {
 }
 
 object Edge {
+  import in.ashwanthkumar.imgraph.types.DataConversions._
+
   def apply(id: Int, leftVertexId: Int, rightVertexId: Int, label: String, edgeType: String): Edge = {
     val props = Properties(Map(
-      LABEL -> StringData(label),
-      LEFT_VERTEX -> IntData(leftVertexId),
-      RIGHT_VERTEX -> IntData(rightVertexId),
-      EDGE_TYPE -> StringData(edgeType)
+      LABEL -> label,
+      LEFT_VERTEX -> leftVertexId,
+      RIGHT_VERTEX -> rightVertexId,
+      EDGE_TYPE -> edgeType
     ))
 
     Edge(id, props)
