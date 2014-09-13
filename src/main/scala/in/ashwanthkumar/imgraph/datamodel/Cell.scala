@@ -2,6 +2,7 @@ package in.ashwanthkumar.imgraph.datamodel
 
 import in.ashwanthkumar.imgraph.datamodel.Constants._
 import in.ashwanthkumar.imgraph.types.{IntData, StringData}
+import in.ashwanthkumar.imgraph.types.DataConversions._
 
 trait Cell {
   require(hasRequiredProperties, s"Cell-$id doesn't have all these ${requiredProperties.mkString(",")} properties")
@@ -23,8 +24,6 @@ case class Edge(id: Int, properties: Properties) extends Cell {
 }
 
 object Edge {
-  import in.ashwanthkumar.imgraph.types.DataConversions._
-
   def apply(id: Int, leftVertexId: Int, rightVertexId: Int, label: String, edgeType: String): Edge = {
     val props = Properties(Map(
       LABEL -> label,
@@ -36,10 +35,26 @@ object Edge {
     Edge(id, props)
   }
 }
+object EdgeType {
+  val IN = "IN"
+  val OUT = "OT"
+  val UNDIRECTED = "UD"
+}
 
 case class Vertex(id: Int, properties: Properties) extends Cell {
   def edges = properties.list[Int](VERTEX_EDGES)
   def name = properties.string(LABEL)
 
   protected def requiredProperties = List(VERTEX_EDGES, LABEL)
+}
+
+object Vertex {
+  def apply(id: Int, label: String, edges: List[Int]): Vertex = {
+    val props = Properties(Map(
+      LABEL -> label,
+      VERTEX_EDGES -> edges
+    ))
+
+    Vertex(id, props)
+  }
 }
