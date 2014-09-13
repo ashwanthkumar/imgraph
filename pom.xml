@@ -43,6 +43,7 @@
                         <configuration>
                             <recompileMode>modified-only</recompileMode>
                             <compileOrder>Mixed</compileOrder>
+                            <addScalacArgs>-feature</addScalacArgs>
                         </configuration>
                     </execution>
                     <execution>
