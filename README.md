@@ -2,6 +2,8 @@
 
 Attempt at implementing [imGraph](http://euranova.eu/upl_docs/publications/imgraph--a-distributed-in-memory-graph-database.pdf) paper. 
 
+[![Build Status](https://travis-ci.org/ashwanthkumar/imgraph.svg?branch=master)](https://travis-ci.org/ashwanthkumar/imgraph)
+
 ### Notes
 
 - Doesn't support undirected graphs
