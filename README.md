@@ -4,6 +4,31 @@ Attempt at implementing [imGraph](http://euranova.eu/upl_docs/publications/imgra
 
 [![Build Status](https://travis-ci.org/ashwanthkumar/imgraph.svg?branch=master)](https://travis-ci.org/ashwanthkumar/imgraph)
 
+### Query DSL
+
+imGraph has a DSL for querying Graph data, inspired from Neo4J's [Cypher](http://docs.neo4j.org/chunked/stable/cypher-query-lang.html).
+
+To find all lovers of Romeo
+```
+Query()
+    .MATCH(("name" ~ "Romeo") | ("age" ~ 22)) --> LABEL("loves") RETURN ("name", "age")
+```
+
+Above query would
+
+1. find the node that has "name"="Romeo" and "age" = 22
+2. find the outgoing edges that says "loves"
+3. return the "name" and "age" props of the resulting nodes
+
+
+Similarly to find who all loves Romeo
+```
+Query()
+    .MATCH(("name" ~ "Romeo") | ("age" ~ 22)) <-- LABEL("loves") RETURN("name", "age")
+```
+
+*Query DSL is still WIP. Any kind of feedback is welcome.*
+
 ### Notes
 
 - Doesn't support undirected graphs
