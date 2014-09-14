@@ -2,6 +2,7 @@ package in.ashwanthkumar.imgraph.query
 
 import in.ashwanthkumar.imgraph.datamodel.Prop._
 import in.ashwanthkumar.imgraph.datamodel.{Constants, Prop, EdgeType, Properties}
+import in.ashwanthkumar.imgraph.types.Data
 import in.ashwanthkumar.imgraph.types.DataConversions._
 
 /*
@@ -11,7 +12,7 @@ import in.ashwanthkumar.imgraph.types.DataConversions._
     To find all lovers of Romeo
     `
       Query()
-        .MATCH(("name" ~ "Romeo") | ("age" ~ 22)) --> LABEL("loves") RETURN ("name", "age")
+        .MATCH(("name" ~ "Romeo", "age" ~ 22)) --> LABEL("loves") RETURN ("name", "age")
     `
 
     Above query would
