@@ -7,13 +7,13 @@ import in.ashwanthkumar.imgraph.types.DataConversions._
 trait Cell {
   require(hasRequiredProperties, s"Cell-$id doesn't have all these ${requiredProperties.mkString(",")} properties")
   val id: Int
-  val properties: Properties
+  val properties: Prop
 
   protected def requiredProperties: List[String]
   protected def hasRequiredProperties: Boolean = requiredProperties.forall(properties.contains)
 }
 
-case class Edge(id: Int, properties: Properties) extends Cell {
+case class Edge(id: Int, properties: Prop) extends Cell {
 
   def left: Int = properties.int(LEFT_VERTEX)
   def right: Int = properties.int(RIGHT_VERTEX)
@@ -25,7 +25,7 @@ case class Edge(id: Int, properties: Properties) extends Cell {
 
 object Edge {
   def apply(id: Int, leftVertexId: Int, rightVertexId: Int, label: String, edgeType: String): Edge = {
-    val props = Properties(Map(
+    val props = Prop(Map(
       LABEL -> label,
       LEFT_VERTEX -> leftVertexId,
       RIGHT_VERTEX -> rightVertexId,
@@ -38,10 +38,10 @@ object Edge {
 object EdgeType {
   val IN = "IN"
   val OUT = "OT"
-  val UNDIRECTED = "UD"
+//  val UNDIRECTED = "UD"
 }
 
-case class Vertex(id: Int, properties: Properties) extends Cell {
+case class Vertex(id: Int, properties: Prop) extends Cell {
   def edges = properties.list[Int](VERTEX_EDGES)
   def name = properties.string(LABEL)
 
@@ -50,7 +50,7 @@ case class Vertex(id: Int, properties: Properties) extends Cell {
 
 object Vertex {
   def apply(id: Int, label: String, edges: List[Int]): Vertex = {
-    val props = Properties(Map(
+    val props = Prop(Map(
       LABEL -> label,
       VERTEX_EDGES -> edges
     ))
