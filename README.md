@@ -35,6 +35,8 @@ Above query would
 2. find the incoming edges that says "loves"
 3. return the "name" and "age" props of the resulting nodes
 
+To find more usages, check the [QueryTest.scala](https://github.com/ashwanthkumar/imgraph/blob/master/src/test/scala/in/ashwanthkumar/imgraph/query/QueryTest.scala).
+
 *Query DSL is still WIP. Any kind of feedback is welcome.*
 
 ### Notes
