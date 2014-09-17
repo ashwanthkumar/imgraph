@@ -8,5 +8,3 @@ case class AddVertex(vertex: Vertex)
 case class AddEdge(edge: Edge)
 case class AddEdgeToVertex(vertexId: Int, newEdgeId: Int)
 case object PrintAll
-
-case class LoadEgoNetwork(egoNetworkId: Int)

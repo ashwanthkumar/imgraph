@@ -7,7 +7,7 @@ import in.ashwanthkumar.imgraph.types.{Data, IntData}
 
 import scala.io.Source
 
-class LoadEgoNetwork(egoNetworkId: Int) extends DataLoader {
+class LoadEgoNetwork(egoNetworkId: Integer) extends DataLoader {
   private val basePath = s"/snap_twitter/$egoNetworkId/"
 
   protected lazy val featureMap = {
@@ -17,9 +17,9 @@ class LoadEgoNetwork(egoNetworkId: Int) extends DataLoader {
       .toMap
   }
 
-  override def loadVertices: Iterable[Vertex] = verticesInNetwork ++ List(mainVertex)
+  override def loadVertices: Iterable[Vertex] = (verticesInNetwork ++ Iterator(mainVertex)).toIterable
 
-  override def loadEdges: Iterable[Edge] = readEdgesFromFile
+  override def loadEdges: Iterable[Edge] = readEdgesFromFile.toIterable
 
   private[loader] def createVertex(vertexId: Int, label: String, vertexFeatures: String) = {
     Vertex(label, parseVertexFeatures(vertexFeatures)).copy(id = vertexId)
@@ -41,7 +41,7 @@ class LoadEgoNetwork(egoNetworkId: Int) extends DataLoader {
   }
 
   private[loader] def readFile(fileName: String) = {
-    Source.fromFile(new File(s"$basePath/$fileName"))
+    Source.fromInputStream(getClass.getResourceAsStream(s"$basePath/$fileName"))
       .getLines()
   }
 
@@ -54,7 +54,7 @@ class LoadEgoNetwork(egoNetworkId: Int) extends DataLoader {
       .map(line => line.split(" ", 2))
       .map(tokens => tokens(0) -> tokens(1))
       .map { case (label, vertexFeatures) => createVertex(label.toInt, label, vertexFeatures)}
-      .toIterable
+      .toIterator
   }
 
   private[loader] def readEdgesFromFile = {
@@ -62,7 +62,7 @@ class LoadEgoNetwork(egoNetworkId: Int) extends DataLoader {
       .map(line => line.split(" ", 2))
       .map(tokens => tokens(0).toInt -> tokens(1).toInt)
       .map(vertexIdTuples => createEdge(vertexIdTuples, "follows", EdgeType.OUT))
-      .toIterable
+      .toIterator
   }
 
 }

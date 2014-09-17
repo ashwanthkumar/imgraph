@@ -4,6 +4,8 @@ import in.ashwanthkumar.imgraph.datamodel.Cell
 
 class InMemoryStore(var store: Map[Int, Cell] = Map()) extends Store[Int, Cell] {
 
+  def this() = this(Map())
+
   override def get(key: Int): Option[Cell] = store.get(key)
 
   override def put(key: Int, value: Cell): Unit = {
@@ -15,5 +17,4 @@ class InMemoryStore(var store: Map[Int, Cell] = Map()) extends Store[Int, Cell] 
 
 object InMemoryStore {
   def fromMap(kvs: Map[Int, Cell]) = new InMemoryStore(kvs)
-
 }

@@ -76,7 +76,7 @@ object Vertex {
   }
 
   def apply(label: String, knownProps: Prop): Vertex = {
-    val labelMap: Map[String, Data] = Map(LABEL -> label)
+    val labelMap: Map[String, Data] = Map(LABEL -> label, VERTEX_EDGES -> List())
     val newProps = Prop(labelMap ++ knownProps.props)
     Vertex(-1, newProps)
   }
