@@ -25,14 +25,14 @@ class DataManager(store: Store[Int, Cell]) extends Actor with ActorLogging with 
     case GetEdge(id) => sender() ! edge(id)
     case GetVertex(id) => sender() ! vertex(id)
     case AddVertex(vertex) =>
-      val vertexId = nextId
+      val vertexId = if(vertex.id == -1) nextId else vertex.id
       store.put(vertexId, vertex.copy(id = vertexId))
     case AddEdgeToVertex(vertexId, newEdgeId) =>
       vertex(vertexId)
         .map(_.addEdge(newEdgeId))
         .foreach(updatedVertex => store.put(updatedVertex.id, updatedVertex))
     case AddEdge(edge) =>
-      val edgeId = nextId
+      val edgeId = if(edge.id == -1) nextId else edge.id
       store.put(edgeId, edge.copy(id = edgeId))
 
       self ! AddEdgeToVertex(edge.left, edgeId)

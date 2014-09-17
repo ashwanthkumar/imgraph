@@ -2,6 +2,7 @@ package in.ashwanthkumar.imgraph.datamodel
 
 import in.ashwanthkumar.imgraph.datamodel.Constants._
 import in.ashwanthkumar.imgraph.store.ReadableStore
+import in.ashwanthkumar.imgraph.types.Data
 import in.ashwanthkumar.imgraph.types.DataConversions._
 
 trait Cell {
@@ -33,6 +34,10 @@ object Edge {
     ))
 
     Edge(id, props)
+  }
+
+  def apply(leftVertexId: Int, rightVertexId: Int, label: String, edgeType: String): Edge = {
+    apply(-1, leftVertexId, rightVertexId, label, edgeType)
   }
 }
 object EdgeType {
@@ -68,5 +73,11 @@ object Vertex {
     ))
 
     Vertex(id, props)
+  }
+
+  def apply(label: String, knownProps: Prop): Vertex = {
+    val labelMap: Map[String, Data] = Map(LABEL -> label)
+    val newProps = Prop(labelMap ++ knownProps.props)
+    Vertex(-1, newProps)
   }
 }
