@@ -54,7 +54,7 @@ class DataManagerTest(_system: ActorSystem)
 
   it should "add given vertex via message" in {
     val dataManager = TestActorRef(Props(classOf[DataManager], new InMemoryStore()))
-    val vertexToAdd = Vertex(id = Random.nextInt(), "Romeo", List())
+    val vertexToAdd = Vertex(id = -1, "Romeo", List())
     dataManager ! AddVertex(vertexToAdd)
 
     dataManager ! GetVertex(1)
@@ -63,12 +63,12 @@ class DataManagerTest(_system: ActorSystem)
 
   it should "add a new edge via AddEdge message" in {
     val dataManager = TestActorRef(Props(classOf[DataManager], new InMemoryStore()))
-    val v1 = Vertex(id = Random.nextInt(), "Romeo", List())
-    val v2 = Vertex(id = Random.nextInt(), "Juliet", List())
+    val v1 = Vertex(id = -1, "Romeo", List())
+    val v2 = Vertex(id = -1, "Juliet", List())
     dataManager ! AddVertex(v1)
     dataManager ! AddVertex(v2)
 
-    val edgeToAdd = Edge(id = Random.nextInt(), 1, 2, "loves", EdgeType.IN)
+    val edgeToAdd = Edge(id = -1, 1, 2, "loves", EdgeType.IN)
     dataManager ! AddEdge(edgeToAdd)
 
     dataManager ! GetEdge(3)
@@ -77,7 +77,7 @@ class DataManagerTest(_system: ActorSystem)
 
   it should "update the edges for a vertex via AddEdgeToVertex message" in {
     val dataManager = TestActorRef(Props(classOf[DataManager], new InMemoryStore()))
-    val v1 = Vertex(id = Random.nextInt(), "Romeo", List())
+    val v1 = Vertex(id = -1, "Romeo", List())
     dataManager ! AddVertex(v1)
     dataManager ! AddEdgeToVertex(1, 2)
 
