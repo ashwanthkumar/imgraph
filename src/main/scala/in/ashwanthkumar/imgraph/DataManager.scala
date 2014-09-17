@@ -2,7 +2,7 @@ package in.ashwanthkumar.imgraph
 
 import akka.actor.{Actor, ActorLogging}
 import in.ashwanthkumar.imgraph.datamodel.{Cell, Edge, Vertex}
-import in.ashwanthkumar.imgraph.store.ReadableStore
+import in.ashwanthkumar.imgraph.store.Store
 
 import scala.util.Try
 
@@ -16,7 +16,7 @@ import scala.util.Try
       - GET queries
       - Property search
  */
-class DataManager(store: ReadableStore[Int, Cell]) extends Actor with ActorLogging {
+class DataManager(store: Store[Int, Cell]) extends Actor with ActorLogging with IdService {
 
   def edge(id: Int) = store.get(id).flatMap(c => Try(c.asInstanceOf[Edge]).toOption)
   def vertex(id: Int) = store.get(id).flatMap(c => Try(c.asInstanceOf[Vertex]).toOption)
@@ -24,5 +24,31 @@ class DataManager(store: ReadableStore[Int, Cell]) extends Actor with ActorLoggi
   override def receive: Receive = {
     case GetEdge(id) => sender() ! edge(id)
     case GetVertex(id) => sender() ! vertex(id)
+    case AddVertex(vertex) =>
+      val vertexId = nextId
+      store.put(vertexId, vertex.copy(id = vertexId))
+    case AddEdgeToVertex(vertexId, newEdgeId) =>
+      vertex(vertexId)
+        .map(_.addEdge(newEdgeId))
+        .foreach(updatedVertex => store.put(updatedVertex.id, updatedVertex))
+    case AddEdge(edge) =>
+      val edgeId = nextId
+      store.put(edgeId, edge.copy(id = edgeId))
+
+      self ! AddEdgeToVertex(edge.left, edgeId)
+      self ! AddEdgeToVertex(edge.right, edgeId)
+
+    case PrintAll =>
+      /* For debugging purposes */
+      store.iterate.foreach(println)
+  }
+}
+
+trait IdService {
+  private var currentId = 0
+
+  def nextId = {
+    currentId += 1
+    currentId
   }
 }

@@ -1,7 +1,7 @@
 package in.ashwanthkumar.imgraph.datamodel
 
-import in.ashwanthkumar.imgraph.types.{ListData, StringData, IntData, Data}
 import in.ashwanthkumar.imgraph.types.DataConversions._
+import in.ashwanthkumar.imgraph.types.{Data, IntData, ListData, StringData}
 
 case class Prop(props: Map[String, Data]) {
   def int(name: String) = props(name).asInstanceOf[IntData].data
@@ -10,6 +10,7 @@ case class Prop(props: Map[String, Data]) {
 
   def contains(key: String) = props.contains(key)
   def get(key: String) = props.get(key)
+  def put(key: String, value: Data) = this.copy(props = props + (key -> value))
   def matches(anotherProperty: Prop) = {
     anotherProperty.props
       .forall(t => isWildCardMatch(t._1) || get(t._1) == Some(t._2))

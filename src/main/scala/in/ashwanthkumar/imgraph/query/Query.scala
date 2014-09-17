@@ -1,8 +1,7 @@
 package in.ashwanthkumar.imgraph.query
 
 import in.ashwanthkumar.imgraph.datamodel.Prop._
-import in.ashwanthkumar.imgraph.datamodel.{Constants, Prop, EdgeType, Properties}
-import in.ashwanthkumar.imgraph.types.Data
+import in.ashwanthkumar.imgraph.datamodel.{Constants, EdgeType, Prop, Properties}
 import in.ashwanthkumar.imgraph.types.DataConversions._
 
 /*

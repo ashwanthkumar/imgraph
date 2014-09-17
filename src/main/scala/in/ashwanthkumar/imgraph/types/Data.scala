@@ -1,6 +1,6 @@
 package in.ashwanthkumar.imgraph.types
 
-import in.ashwanthkumar.imgraph.datamodel.{Properties, Prop}
+import in.ashwanthkumar.imgraph.datamodel.{Prop, Properties}
 
 abstract class Data
 

@@ -7,6 +7,7 @@ import in.ashwanthkumar.imgraph.store.InMemoryStore
 import org.scalatest.{BeforeAndAfterAll, FlatSpecLike, Matchers}
 
 import scala.concurrent.duration.DurationDouble
+import scala.util.Random
 
 class DataManagerTest(_system: ActorSystem)
   extends TestKit(_system)
@@ -49,6 +50,39 @@ class DataManagerTest(_system: ActorSystem)
 
     dataManager ! GetVertex(1)
     expectMsgType[Option[Vertex]] should be(Some(Vertex(1, "Romeo", List(3, 4))))
+  }
+
+  it should "add given vertex via message" in {
+    val dataManager = TestActorRef(Props(classOf[DataManager], new InMemoryStore()))
+    val vertexToAdd = Vertex(id = Random.nextInt(), "Romeo", List())
+    dataManager ! AddVertex(vertexToAdd)
+
+    dataManager ! GetVertex(1)
+    expectMsgType[Option[Vertex]] should be(Some(vertexToAdd.copy(id = 1)))
+  }
+
+  it should "add a new edge via AddEdge message" in {
+    val dataManager = TestActorRef(Props(classOf[DataManager], new InMemoryStore()))
+    val v1 = Vertex(id = Random.nextInt(), "Romeo", List())
+    val v2 = Vertex(id = Random.nextInt(), "Juliet", List())
+    dataManager ! AddVertex(v1)
+    dataManager ! AddVertex(v2)
+
+    val edgeToAdd = Edge(id = Random.nextInt(), 1, 2, "loves", EdgeType.IN)
+    dataManager ! AddEdge(edgeToAdd)
+
+    dataManager ! GetEdge(3)
+    expectMsgType[Option[Edge]] should be(Some(edgeToAdd.copy(id = 3)))
+  }
+
+  it should "update the edges for a vertex via AddEdgeToVertex message" in {
+    val dataManager = TestActorRef(Props(classOf[DataManager], new InMemoryStore()))
+    val v1 = Vertex(id = Random.nextInt(), "Romeo", List())
+    dataManager ! AddVertex(v1)
+    dataManager ! AddEdgeToVertex(1, 2)
+
+    dataManager ! GetVertex(1)
+    expectMsgType[Option[Vertex]].map(_.edges) should be(Some(List(2)))
   }
 
 }

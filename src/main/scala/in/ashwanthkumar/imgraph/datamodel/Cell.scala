@@ -1,7 +1,7 @@
 package in.ashwanthkumar.imgraph.datamodel
 
 import in.ashwanthkumar.imgraph.datamodel.Constants._
-import in.ashwanthkumar.imgraph.types.{IntData, StringData}
+import in.ashwanthkumar.imgraph.store.ReadableStore
 import in.ashwanthkumar.imgraph.types.DataConversions._
 
 trait Cell {
@@ -43,7 +43,19 @@ object EdgeType {
 
 case class Vertex(id: Int, properties: Prop) extends Cell {
   def edges = properties.list[Int](VERTEX_EDGES)
+  /*
+    edges(ReadableStore) would give you resolved Edge objects, while
+    edges would return just edgeIds
+   */
+  def edges(store: ReadableStore[Int, Cell]): Iterable[Option[Edge]] = {
+    edges
+      .map(id =>store.get(id).asInstanceOf[Option[Edge]])
+      .filter(_.isDefined)
+  }
   def name = properties.string(LABEL)
+  def addEdge(id: Int) = {
+    this.copy(properties = properties.put(VERTEX_EDGES, edges ++ List(id)))
+  }
 
   protected def requiredProperties = List(VERTEX_EDGES, LABEL)
 }
