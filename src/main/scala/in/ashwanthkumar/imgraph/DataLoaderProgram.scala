@@ -1,6 +1,12 @@
 package in.ashwanthkumar.imgraph
 
 import akka.actor.{ActorSystem, Props}
+import akka.pattern.ask
+import akka.util.Timeout
+import in.ashwanthkumar.imgraph.datamodel.Vertex
+
+import scala.concurrent.Await
+import scala.concurrent.duration.DurationDouble
 
 /*
   Loads a sample Graph to imGraph Machine
@@ -22,9 +28,10 @@ object DataLoaderProgram extends App {
     .loadEdges
     .foreach(edge => dataManager ! AddEdge(edge))
 
-  // Print all the edges
-  dataManager ! PrintAll
-
+  implicit val timeout = Timeout(1 second)
+  // Lets do some querying on the data
+  val vertex = (dataManager ? GetVertex(883301)).mapTo[Option[Vertex]]
+  println(Await.result(vertex, 1 second))
 
   Thread.sleep(10000)
   system.shutdown()
