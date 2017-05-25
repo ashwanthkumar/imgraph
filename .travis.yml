@@ -3,7 +3,11 @@ addons:
   hosts:
     - travis-build-javasdk
   hostname: travis-build-javasdk
-
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.ivy2
+  - $HOME/.coursier
 jdk:
   - oraclejdk7
   - openjdk7
