@@ -1,10 +1,12 @@
-import Dependencies._
-import sbt.Package.ManifestAttributes
-import sbt.SbtExclusionRule
-import sbt.Keys._
 import java.net.InetAddress
 
-val scalaV = "2.10.6"
+import Dependencies._
+import sbt.Keys._
+import sbt.Package.ManifestAttributes
+import sbt.SbtExclusionRule
+
+val scalaV = "2.11.8"
+val oldScalaV = "2.10.6"
 
 def appVersion() = sys.env.getOrElse("GO_PIPELINE_LABEL", "1.0.0-SNAPSHOT")
 
@@ -12,13 +14,22 @@ ivyScala := ivyScala.value map {
   _.copy(overrideScalaVersion = true)
 }
 
-lazy val imgraph = (project in file(".")).
+lazy val imgraphCore = (project in file("imgraph-core")).
   settings(
     name := "imgraph-core",
     libraryDependencies ++= coreDependencies
   )
   .settings(projectSettings: _*)
   .settings(publishSettings: _*)
+
+@deprecated("Keeping the old code for historical significance")
+lazy val imgraphOld = (project in file("imgraph-old"))
+  .settings(projectSettings: _*)
+  .settings(
+    name := "imgraph-old",
+    libraryDependencies ++= oldDependencies,
+    scalaVersion := oldScalaV
+  )
 
 lazy val projectSettings = net.virtualvoid.sbt.graph.Plugin.graphSettings ++ Seq(
   version := appVersion,

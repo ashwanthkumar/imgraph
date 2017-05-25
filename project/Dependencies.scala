@@ -8,5 +8,6 @@ object Dependencies {
 
   val scalaTest = "org.scalatest" %% "scalatest" % "2.2.0" % "test"
 
-  val coreDependencies = Seq(akkaRemote, akkaActor, akkaTestkit, scalaTest)
+  val coreDependencies = Seq(scalaTest)
+  val oldDependencies = Seq(akkaRemote, akkaActor, akkaTestkit, scalaTest)
 }
