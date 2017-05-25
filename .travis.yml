@@ -1,4 +1,9 @@
 language: scala
+addons:
+  hosts:
+    - travis-build-javasdk
+  hostname: travis-build-javasdk
+
 jdk:
   - oraclejdk7
   - openjdk7
